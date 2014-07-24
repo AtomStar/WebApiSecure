@@ -16,8 +16,7 @@ WebApiSecure makes use of dependency injection using a **Unity container** which
 1. Open Package Manager Console and type: `install-package WebApiSecure`
  
   * After installation you will see **UnityConfig.cs** added below App_Start and a new **Services** folder with the 3 default implmentation services mentioned above:
-
-![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/solution.jpg)
+  * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/solution.jpg)
 
 2. Add reference to `System.IdentityModel` if needed.
 3. Modify **CredentialService.cs**
@@ -31,26 +30,20 @@ WebApiSecure makes use of dependency injection using a **Unity container** which
   * Change the `TokenValidationParameters` and set your secret symmetric signing key
 6. Wire up the services in **UnityConfig.cs** 
   * Set the allowed route to the token endpoint via parameter injection. This route will be ignored by the `AuthHandler`, so that users can make a request to the token endpoint.
-
-![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/UnityConfig.jpg)
+  * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/UnityConfig.jpg)
 
 7. Modify WebApiConfig.cs
   * Set the route to the token endpoint. WebApiSecure uses a `TokenController` that exposes to POST endpoints: `PostSecure` and `Post` with a grantType parameter. The parameter to use is **client_credentials**. `PostSecure` should be used since it requires a secure SSL connection to submit the client credentials. For testing purposes the unsecure `Post` may be used.
   * Secure your api by enabling the `AuthHandler` by adding it as a MessageHandler
-
-![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/WebApiConfig.jpg)
+  * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/WebApiConfig.jpg)
 
 #Test it
 Fire up **Fiddler** to test your secured API:
 
 1. Make a GET request. This should return HTTP status 400 - Bad Request, since no authorization header is present the request fails.
-
-![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/BadRequest.jpg)
-
+  * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/BadRequest.jpg)
 2. Make a POST request to the token endpoint to get a token. Set header: `Authorization: Basic yourBase64Credentials`. Copy the returned token.
-
-![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/TokenRequest.jpg)
-
+  * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/TokenRequest.jpg)
 3. Make a valid GET/POST request. Set header: `Authorization: Bearer yourTokenString`
 
 #Roll your own
