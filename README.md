@@ -1,7 +1,8 @@
 WebApiSecure
 ============
 
-Secure your **Web API 2** using **JWT (Json Web Token)** or your own implementation. **Basic Authorization** is used for the token request and **Bearer Authorization** using a token for API requests. The project provides a token endpoint against which a user can authorize to get a token. Further requests to the api can then be made with the token. There is a built in authorization handler that validates this token for all requests made - it secures all api endpoints. WebApiSecure is available via Nuget: `install-package WebApiSecure`
+Secure your **Web API 2** using **JWT (Json Web Token)** or your own implementation. **Basic Authorization** is used for the token request and **Bearer Authorization** using a token for API requests. The project provides a token endpoint against which a user can authorize to get a token. Further requests to the api can then be made with the token. There is a built in authorization handler that validates this token for all requests made - it secures all api endpoints. 
+WebApiSecure is available via **Nuget**: `install-package WebApiSecure`
 
 ###Dependency Injection
 
@@ -14,10 +15,8 @@ WebApiSecure makes use of dependency injection using a **Unity container** which
 #Getting started
 
 1. Open Package Manager Console and type: `install-package WebApiSecure`
- 
   * After installation you will see **UnityConfig.cs** added below App_Start and a new **Services** folder with the 3 default implmentation services mentioned above:
   * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/solution.jpg)
-
 2. Add reference to `System.IdentityModel` if needed.
 3. Modify **CredentialService.cs**
   * Add code to validate credential in the `IsValidCredential` method
@@ -31,7 +30,6 @@ WebApiSecure makes use of dependency injection using a **Unity container** which
 6. Wire up the services in **UnityConfig.cs** 
   * Set the allowed route to the token endpoint via parameter injection. This route will be ignored by the `AuthHandler`, so that users can make a request to the token endpoint.
   * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/UnityConfig.jpg)
-
 7. Modify WebApiConfig.cs
   * Set the route to the token endpoint. WebApiSecure uses a `TokenController` that exposes to POST endpoints: `PostSecure` and `Post` with a grantType parameter. The parameter to use is **client_credentials**. `PostSecure` should be used since it requires a secure SSL connection to submit the client credentials. For testing purposes the unsecure `Post` may be used.
   * Secure your api by enabling the `AuthHandler` by adding it as a MessageHandler
@@ -45,6 +43,7 @@ Fire up **Fiddler** to test your secured API:
 2. Make a POST request to the token endpoint to get a token. Set header: `Authorization: Basic yourBase64Credentials`. Copy the returned token.
   * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/TokenRequest.jpg)
 3. Make a valid GET/POST request. Set header: `Authorization: Bearer yourTokenString`
+  * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/ApiRequest.jpg)
 
 #Roll your own
 
