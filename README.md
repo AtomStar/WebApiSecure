@@ -2,6 +2,7 @@ WebApiSecure
 ============
 
 Secure your **Web API 2** using **JWT (Json Web Token)** or your own implementation. **Basic Authorization** is used for the token request and **Bearer Authorization** using a token for API requests. The project provides a token endpoint against which a user can authorize to get a token. Further requests to the api can then be made with the token. There is a built in authorization handler that validates this token for all requests made - it secures all api endpoints. 
+
 WebApiSecure is available via **Nuget**: `install-package WebApiSecure`
 
 ###Dependency Injection
@@ -48,7 +49,7 @@ Fire up **Fiddler** to test your secured API:
 #Roll your own
 
 ###Interfaces to implement
-You can roll your own by implementing the following interfaces and then wiring your classes up in UnityConfig.cs:
+You can roll your own by implementing the following interfaces and then wiring your classes up in `UnityConfig.cs`:
 
 1. IClaim
 2. ITokenBuilder
