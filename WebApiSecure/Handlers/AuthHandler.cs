@@ -19,7 +19,8 @@ namespace WebApiSecure.Handlers
         {
             HttpStatusCode statusCode = HttpStatusCode.BadRequest;
             AuthenticationHeaderValue authValue = request.Headers.Authorization;
-
+            if (request.Method.Method == "OPTIONS")
+                return base.SendAsync(request, cancellationToken);
             if (authValue != null && !String.IsNullOrWhiteSpace(authValue.Parameter))
             {
                 try
