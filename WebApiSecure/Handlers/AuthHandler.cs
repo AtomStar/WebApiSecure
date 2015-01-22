@@ -43,6 +43,7 @@ namespace WebApiSecure.Handlers
                 { statusCode = HttpStatusCode.InternalServerError; }
             }
             return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
+
         }     
     }
 }
