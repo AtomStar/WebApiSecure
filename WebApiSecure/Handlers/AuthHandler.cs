@@ -19,7 +19,7 @@ namespace WebApiSecure.Handlers
         {
             HttpStatusCode statusCode = HttpStatusCode.BadRequest;
             AuthenticationHeaderValue authValue = request.Headers.Authorization;
-            if (request.Method.Method == "OPTIONS") 
+            if (request.Method.Method == "OPTIONS" || request.RequestUri.PathAndQuery.Contains("meta")) 
                 return base.SendAsync(request, cancellationToken);
             if (authValue != null && !String.IsNullOrWhiteSpace(authValue.Parameter))
             {
