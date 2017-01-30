@@ -20,7 +20,7 @@ namespace WebApiSecure.Controllers
             if (headers != null && headers.Authorization != null && headers.Authorization.Scheme == "Basic")
             {
                 if (String.IsNullOrWhiteSpace(grantType))
-                    return BadRequest("Invalid request");
+                    return BadRequest("Invalid request - grant type not specified");
                 else if (grantType != "client_credentials")
                     return BadRequest("Invalid grant type");
                 try

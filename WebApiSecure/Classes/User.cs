@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiSecure.Interfaces;
+using System.Security.Claims;
 
 namespace WebApiSecure.Classes
 {
-    public class User:IClaim
+    public class User : IClaim
     {
-        public List<System.Security.Claims.Claim> GetClaims()
+        public List<Claim> GetClaims()
         {
-            throw new NotImplementedException();
+            return new List<Claim>();
         }
     }
 }

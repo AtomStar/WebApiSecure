@@ -13,13 +13,13 @@ using WebApiSecure.Interfaces;
 
 namespace WebApiSecure.Handlers
 {
-    public class AuthHandler:DelegatingHandler
+    public class AuthHandler : DelegatingHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
             HttpStatusCode statusCode = HttpStatusCode.BadRequest;
             AuthenticationHeaderValue authValue = request.Headers.Authorization;
-            if (request.Method.Method == "OPTIONS" || request.RequestUri.PathAndQuery.Contains("meta")) 
+            if (request.Method.Method == "OPTIONS" || request.RequestUri.PathAndQuery.Contains("meta"))
                 return base.SendAsync(request, cancellationToken);
             if (authValue != null && !String.IsNullOrWhiteSpace(authValue.Parameter))
             {
@@ -43,8 +43,6 @@ namespace WebApiSecure.Handlers
                 { statusCode = HttpStatusCode.InternalServerError; }
             }
             return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
-
-
-        }     
+        }
     }
 }

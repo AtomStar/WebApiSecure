@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.ServiceModel.Security.Tokens;
-using System.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiSecure.Classes;
 using WebApiSecure.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.Tokens;
 
 namespace WebApiSecure.Services
 {
@@ -18,14 +18,21 @@ namespace WebApiSecure.Services
         public ClaimsPrincipal ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken validatedToken = null;
             var validationParameters = new TokenValidationParameters()
             {
-                AllowedAudience = "MyAudience",
-                ValidIssuer = "http://www.example.com",
-                SigningToken = new BinarySecretSecurityToken(Convert.FromBase64String("SymmetricKey"))
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("SymmetricKey")),
 
+                ValidateAudience = true,
+                ValidAudience = "MyAudience",
+
+                ValidateIssuer = true,
+                ValidIssuer = "http://www.example.com",
+                ValidateLifetime = true
             };
-            var claimsPrincipal = tokenHandler.ValidateToken(token, validationParameters);
+
+            var claimsPrincipal = tokenHandler.ValidateToken(token, validationParameters, out validatedToken);
             return claimsPrincipal;
         }
     }

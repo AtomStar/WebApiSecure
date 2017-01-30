@@ -12,6 +12,7 @@ namespace WebApiSecure.Services
     {
         public bool IsValidCredential(ICredential credential)
         {
+            //verify the credential against DB
             var user = "";
             if (user == null)
                 return false;
@@ -30,6 +31,7 @@ namespace WebApiSecure.Services
         }
         public IClaim GetClaim(ICredential credential)
         {
+            //return something that implements IClaim and has the claims associated with the credential
             var user = new User();
             return user;
         }

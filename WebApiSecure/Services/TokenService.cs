@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IdentityModel.Protocols.WSTrust;
-using System.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebApiSecure.Interfaces;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace WebApiSecure.Services
 {
@@ -17,7 +17,8 @@ namespace WebApiSecure.Services
                      (issuer: "http://www.example.com"
                      , audience: "MyAudience"
                      , claims: credentialClaim.GetClaims()
-                     , lifetime: new Lifetime(DateTime.UtcNow, DateTime.UtcNow.AddHours(24))
+                     , notBefore: DateTime.UtcNow
+                     , expires: DateTime.UtcNow.AddHours(24)
                      , signingCredentials: CreateSigningCredentials());
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -27,13 +28,12 @@ namespace WebApiSecure.Services
 
         private SigningCredentials CreateSigningCredentials()
         {
-            string symmetricKey = "SymmetricKey";
-            byte[] keybytes = Convert.FromBase64String(symmetricKey);
-            SecurityKey securityKey = new InMemorySymmetricSecurityKey(keybytes);
+            string secretKey = "MySuperSecretKey";
+            byte[] keybytes = Encoding.ASCII.GetBytes(secretKey);
+            SecurityKey securityKey = new SymmetricSecurityKey(keybytes);
             SigningCredentials signingCredentials =
                     new SigningCredentials(securityKey,
-                        SecurityAlgorithms.HmacSha256Signature,
-                        SecurityAlgorithms.Sha256Digest);
+                        SecurityAlgorithms.HmacSha256Signature);
             return signingCredentials;
         }
     }

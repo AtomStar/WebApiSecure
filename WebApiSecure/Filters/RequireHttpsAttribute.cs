@@ -9,7 +9,7 @@ using System.Web.Http.Filters;
 
 namespace WebApiSecure.Filters
 {
-    public class RequireHttpsAttribute:AuthorizationFilterAttribute
+    public class RequireHttpsAttribute : AuthorizationFilterAttribute
     {
         public override void OnAuthorization(HttpActionContext actionContext)
         {
