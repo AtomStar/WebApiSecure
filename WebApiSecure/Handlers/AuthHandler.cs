@@ -19,13 +19,14 @@ namespace WebApiSecure.Handlers
         {
             HttpStatusCode statusCode = HttpStatusCode.BadRequest;
             AuthenticationHeaderValue authValue = request.Headers.Authorization;
-            if (request.Method.Method == "OPTIONS" || request.RequestUri.PathAndQuery.Contains("meta"))
+            var validationService = request.GetDependencyScope().GetService(typeof(IValidateToken)) as IValidateToken;
+
+            if (validationService.IsAllowedRoute(request.RequestUri.PathAndQuery) || request.Method.Method == "OPTIONS" || request.RequestUri.PathAndQuery.Contains("meta"))
                 return base.SendAsync(request, cancellationToken);
             if (authValue != null && !String.IsNullOrWhiteSpace(authValue.Parameter))
             {
                 try
                 {
-                    var validationService = request.GetDependencyScope().GetService(typeof(IValidateToken)) as IValidateToken;
                     if (authValue.Scheme == "Basic" && request.RequestUri.PathAndQuery.Contains(validationService.AllowedTokenRoute))
                         return base.SendAsync(request, cancellationToken);
                     else if (authValue.Scheme == "Bearer")
@@ -44,5 +45,6 @@ namespace WebApiSecure.Handlers
             }
             return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
         }
+
     }
 }

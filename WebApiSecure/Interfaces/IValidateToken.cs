@@ -9,7 +9,9 @@ namespace WebApiSecure.Interfaces
 {
     public interface IValidateToken
     {
+        IEnumerable<string> AllowedRoutes { get; set; }
         string AllowedTokenRoute { get; set; }
-        ClaimsPrincipal ValidateToken(string token);       
+        bool IsAllowedRoute(string route);
+        ClaimsPrincipal ValidateToken(string token);
     }
 }

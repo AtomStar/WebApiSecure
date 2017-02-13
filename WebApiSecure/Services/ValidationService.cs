@@ -14,7 +14,16 @@ namespace WebApiSecure.Services
     public class ValidationService : IValidateToken
     {
         public string AllowedTokenRoute { get; set; }
-
+        public IEnumerable<string> AllowedRoutes { get; set; }
+        public bool IsAllowedRoute(string route)
+        {
+            foreach (var item in AllowedRoutes)
+            {
+                if (route.ToLower().EndsWith(item.ToLower()))
+                    return true;
+            }
+            return false;      
+        }
         public ClaimsPrincipal ValidateToken(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
