@@ -32,7 +32,7 @@ WebApiSecure makes use of dependency injection using a **Unity container** which
   * Set the allowed route to the token endpoint via parameter injection. This route will be ignored by the `AuthHandler`, so that users can make a request to the token endpoint.
   * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/UnityConfig.jpg)
 7. Modify WebApiConfig.cs
-  * Set the route to the token endpoint. WebApiSecure uses a `TokenController` that exposes to POST endpoints: `PostSecure` and `Post` with a grantType parameter. The parameter to use is **client_credentials**. `PostSecure` should be used since it requires a secure SSL connection to submit the client credentials. For testing purposes the unsecure `Post` may be used.
+  * Set the route to the token endpoint. WebApiSecure uses a `TokenController` that exposes to POST endpoints: `PostSecure` and `Post`. `PostSecure` should be used since it requires a secure SSL connection to submit the client credentials. For testing purposes the unsecure `Post` may be used.
   * Secure your api by enabling the `AuthHandler` by adding it as a MessageHandler
   * ![alt tag](http://googledrive.com/host/0BwwmUpymTB5WeWhkbU1iYkg3ZGs/WebApiConfig.jpg)
 
