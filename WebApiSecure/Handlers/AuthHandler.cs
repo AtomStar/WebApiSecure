@@ -17,7 +17,8 @@ namespace WebApiSecure.Handlers
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
-            HttpStatusCode statusCode = HttpStatusCode.BadRequest;
+            var responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "No authorization header found in the request");
+
             AuthenticationHeaderValue authValue = request.Headers.Authorization;
             var validationService = request.GetDependencyScope().GetService(typeof(IValidateToken)) as IValidateToken;
 
@@ -39,11 +40,11 @@ namespace WebApiSecure.Handlers
                     }
                 }
                 catch (SecurityTokenValidationException)
-                { statusCode = HttpStatusCode.Unauthorized; }
+                { responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "Authentication failed"); }
                 catch (Exception)
-                { statusCode = HttpStatusCode.InternalServerError; }
+                { responseMessage = request.CreateResponse(HttpStatusCode.InternalServerError, "An exception occured during authentication"); }
             }
-            return Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage(statusCode));
+            return Task<HttpResponseMessage>.Factory.StartNew(() => responseMessage);
         }
 
     }
