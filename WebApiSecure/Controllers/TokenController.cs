@@ -45,11 +45,11 @@ namespace WebApiSecure.Controllers
                 }
                 catch (FormatException exf)
                 {
-                    return BadRequest("Invalid authorization header format." + exf.Message);
+                    return BadRequest("Invalid authorization header format. " + exf.Message);
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest("Internal server error" + ex.Message);
+                    return BadRequest("Internal server error. " + ex.Message);
                 }
             }
             return BadRequest("Invalid authorization header. The authorization header has to be set an in the format 'Basic myBase64Credential'");
