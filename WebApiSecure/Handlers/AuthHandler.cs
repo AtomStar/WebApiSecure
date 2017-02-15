@@ -17,7 +17,7 @@ namespace WebApiSecure.Handlers
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
         {
-            var responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "No authorization header found in the request");
+            var responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "Authentication failed");
 
             AuthenticationHeaderValue authValue = request.Headers.Authorization;
             var validationService = request.GetDependencyScope().GetService(typeof(IValidateToken)) as IValidateToken;
@@ -38,12 +38,16 @@ namespace WebApiSecure.Handlers
                         HttpContext.Current.User = claimsPrincipal;
                         return base.SendAsync(request, cancellationToken);
                     }
+                    else
+                        responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "Authentication failed. The authorization header format should be 'Basic myBase64Credential' or 'Bearer myToken'. Also check that you have a valid route (AllowedTokenRoute) for Basic authentication");
                 }
                 catch (SecurityTokenValidationException)
-                { responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "Authentication failed"); }
-                catch (Exception)
-                { responseMessage = request.CreateResponse(HttpStatusCode.InternalServerError, "An exception occured during authentication"); }
+                { responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "Authentication failed. The token is not valid"); }
+                catch (Exception ex)
+                { responseMessage = request.CreateResponse(HttpStatusCode.InternalServerError, "An exception occured during authentication. " + ex.Message); }
             }
+            else
+                responseMessage = request.CreateResponse(HttpStatusCode.Unauthorized, "Authentication failed. No authorization header found in the request");
             return Task<HttpResponseMessage>.Factory.StartNew(() => responseMessage);
         }
 

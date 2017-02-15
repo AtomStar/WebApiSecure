@@ -11,16 +11,18 @@ using WebApiSecure.Interfaces;
 
 namespace WebApiSecure.Controllers
 {
-    public class TokenController: ApiController
+    public class TokenController : ApiController
     {
         [RequireHttps]
+        [RequireToken]
         public IHttpActionResult PostSecure()
         {
-            return CreateToken(Request.Headers);      
+            return CreateToken(Request.Headers);
         }
+        [RequireToken]
         public IHttpActionResult Post()
         {
-            return CreateToken(Request.Headers);      
+            return CreateToken(Request.Headers);
         }
         private IHttpActionResult CreateToken(HttpRequestHeaders headers)
         {
@@ -41,16 +43,16 @@ namespace WebApiSecure.Controllers
                     else
                         return BadRequest("Invalid client credentials");
                 }
-                catch (FormatException)
+                catch (FormatException exf)
                 {
-                    return BadRequest("Invalid authorization header format");
+                    return BadRequest("Invalid authorization header format." + exf.Message);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return BadRequest("Internal server error");
+                    return BadRequest("Internal server error" + ex.Message);
                 }
             }
-            return BadRequest("Invalid authorization header");
+            return BadRequest("Invalid authorization header. The authorization header has to be set an in the format 'Basic myBase64Credential'");
         }
     }
 }
